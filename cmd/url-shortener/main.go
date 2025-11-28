@@ -11,6 +11,8 @@ import (
 	"github.com/joho/godotenv"
 
 	"GoURLShortener/internal/config"
+	"GoURLShortener/internal/http-server/handlers/delete_url"
+	"GoURLShortener/internal/http-server/handlers/redirect"
 	"GoURLShortener/internal/http-server/handlers/save"
 	mwLogger "GoURLShortener/internal/http-server/middleware/logger"
 	"GoURLShortener/internal/lib/logger/slogpretty"
@@ -49,8 +51,13 @@ func main() {
 	router.Use(middleware.URLFormat)
 
 	router.Post("/save", save.New(log, storage))
+	router.Get("/{alias}", redirect.New(log, storage))
+	router.Delete("/{alias}", delete_url.New(log, storage))
 
-	log.Info("starting HTTP server", slog.String("host", cfg.HTTPServer.Host), slog.Int("port", cfg.HTTPServer.Port))
+	log.Info("starting HTTP server",
+		slog.String("host", cfg.HTTPServer.Host),
+		slog.Int("port", cfg.HTTPServer.Port),
+	)
 
 	srv := &http.Server{
 		Addr:         fmt.Sprintf("%s:%d", cfg.HTTPServer.Host, cfg.HTTPServer.Port),

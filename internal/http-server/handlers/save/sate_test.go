@@ -36,6 +36,11 @@ func TestSaveHandler(t *testing.T) {
 			url:   "https://google.com",
 		},
 		{
+			name:  "Url in alias",
+			alias: "https://google.com",
+			url:   "https://google.com",
+		},
+		{
 			name:      "Empty URL",
 			url:       "",
 			alias:     "some_alias",
