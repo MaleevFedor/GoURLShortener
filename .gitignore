@@ -1,2 +1,4 @@
 config/local.yaml
 storage/storage.db
+.vscode/
+.gitignore

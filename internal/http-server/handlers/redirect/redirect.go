@@ -14,7 +14,7 @@ import (
 	"GoURLShortener/internal/storage"
 )
 
-//go:generate go run github.com/vektra/mockery/v2@v2.28.2 --name=URLGetter
+//go:generate go run github.com/vektra/mockery/v2@latest --name URLGetter --output ./mocks --outpkg mocks
 type URLGetter interface {
 	GetUrl(alias string) (string, error)
 }
