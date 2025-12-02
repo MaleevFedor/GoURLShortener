@@ -1,8 +1,11 @@
 name: Deploy App
 
 on:
-  pull_request:
-    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to deploy'
+        required: true
 
 jobs:
   deploy:
@@ -14,15 +17,17 @@ jobs:
       ENV_FILE_PATH: /root/apps/url-shortener/config.env
 
     steps:
-      - name: Checkout repository (PR HEAD)
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v2
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
-
-      - name: Show current commit info
+          ref: ${{ github.event.inputs.tag }}
+      - name: Check if tag exists
         run: |
-          echo "PR branch: ${{ github.event.pull_request.head.ref }}"
-          echo "Commit SHA: ${{ github.event.pull_request.head.sha }}"
+          git fetch --all --tags
+          if ! git tag | grep -q "^${{ github.event.inputs.tag }}$"; then
+            echo "error: Tag '${{ github.event.inputs.tag }}' not found"
+            exit 1
+          fi
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
