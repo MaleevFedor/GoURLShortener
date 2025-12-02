@@ -2,3 +2,5 @@ config/local.yaml
 storage/storage.db
 .vscode/
 .gitignore
+deploy_key
+deploy_key.pub
